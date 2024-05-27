@@ -3,17 +3,22 @@
 <title>Static Call Graph - [.\Objects\CPU_18.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\CPU_18.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6100100: Last Updated: Mon May 27 18:51:47 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6100100: Last Updated: Mon May 27 19:22:00 2024
 <BR><P>
-<H3>Maximum Stack Usage =          0 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 
 <P>
 <H3>
+Functions with no stack information
+</H3><UL>
+ <LI><a href="#[4]">MyProg</a>
+</UL>
+</UL>
+<P>
+<H3>
 Mutually Recursive functions
-</H3> <LI><a href="#[8]">loop</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[8]">loop</a><BR>
- <LI><a href="#[6]">Copy_Matrix</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[6]">Copy_Matrix</a><BR>
- <LI><a href="#[4]">MyProg</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[4]">MyProg</a><BR>
+</H3> <LI><a href="#[4]">MyProg</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[4]">MyProg</a><BR>
  <LI><a href="#[1]">NMI_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[1]">NMI_Handler</a><BR>
 </UL>
 <P>
@@ -37,43 +42,15 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_1.o(RESET)
 </UL>
-<P><STRONG><a name="[4]"></a>MyProg</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, myprog_18_4.o(MyCode))
-<BR><BR>[Calls]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Copy_Array_Sort
-<LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
+<P><STRONG><a name="[4]"></a>MyProg</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, myprog_18_4.o(MyCode))
+<BR><BR>[Calls]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
 </UL>
 <P>
 <H3>
 Local Symbols
-</H3>
-<P><STRONG><a name="[5]"></a>Copy_Array_Sort</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, myprog_18_4.o(MyCode))
-<BR><BR>[Calls]<UL><LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sort_Array_Max_Min
-<LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Copy_Matrix
-</UL>
-<BR>[Called By]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
-</UL>
-
-<P><STRONG><a name="[6]"></a>Copy_Matrix</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, myprog_18_4.o(MyCode))
-<BR><BR>[Calls]<UL><LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Copy_Matrix
-</UL>
-<BR>[Called By]<UL><LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Copy_Matrix
-<LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Copy_Array_Sort
-</UL>
-
-<P><STRONG><a name="[7]"></a>Sort_Array_Max_Min</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, myprog_18_4.o(MyCode))
-<BR><BR>[Calls]<UL><LI><a href="#[8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loop
-</UL>
-<BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Copy_Array_Sort
-</UL>
-
-<P><STRONG><a name="[8]"></a>loop</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, myprog_18_4.o(MyCode))
-<BR><BR>[Calls]<UL><LI><a href="#[8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loop
-</UL>
-<BR>[Called By]<UL><LI><a href="#[8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loop
-<LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sort_Array_Max_Min
-</UL>
-<P>
+</H3><P>
 <H3>
 Undefined Global Symbols
 </H3><HR></body></html>
