@@ -1,0 +1,72 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Работа со стеком с использованием команд 
+    2 00000000         ; PUSH, POP
+    3 00000000         
+    4 00000000         ; Объявить кодовую секцию MyCode
+    5 00000000                 AREA             MyCode, CODE, ReadOnly
+    6 00000000         ; Объявить точку входа в программу приложения 
+    7 00000000                 ENTRY
+    8 00000000         ; Объвить точку входа глобальной переменной
+    9 00000000                 EXPORT           MyProg
+   10 00000000         MyProg
+   11 00000000         ; Инициализация трех регистров ЦПУ начальными данными
+   12 00000000 F04F 0101       MOV              r1,#1
+   13 00000004 F04F 0202       MOV              r2,#2
+   14 00000008 F04F 0303       MOV              r3,#3
+   15 0000000C         ; Сохранить значения регистров в стеке
+   16 0000000C         LOOP
+   17 0000000C B40E            PUSH             {r1,r2,r3}
+   18 0000000E         ;    ... 
+   19 0000000E         ; Использование регистов r1,r2,r3 (для примера, обнуление) 
+   20 0000000E F04F 0100       MOV              r1,#0
+   21 00000012 F04F 0200       MOV              r2,#0
+   22 00000016 F04F 0300       MOV              R3,#0
+   23 0000001A         ;    ...
+   24 0000001A         ; Восстановить значения регистров из стека
+   25 0000001A BC0E            POP              {r1,r2,r3}
+   26 0000001C         ; Повторить цикл сохранения/восстановления данных
+   27 0000001C         ; в стеке для других значений в регистрах
+   28 0000001C E7F6            B                LOOP
+   29 0000001E         ; Конец ассемблерного текста
+   30 0000001E                 END
+Command Line: --debug --xref --width=132 --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=interwork --depend=.\objects\myprog_18.d -o.
+\objects\myprog_18.o -IE:\ARM\�������_ARM\�������\CPU\CPU_18\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.3.0\Device\ARM\ARMCM4\Include -IC
+:\Keil_v5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 515" --predefine="ARMCM4_FP SETA 1" --li
+st=.\listings\myprog_18.lst MyProg_18.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+LOOP 0000000C
+
+Symbol: LOOP
+   Definitions
+      At line 16 in file MyProg_18.s
+   Uses
+      At line 28 in file MyProg_18.s
+Comment: LOOP used once
+MyCode 00000000
+
+Symbol: MyCode
+   Definitions
+      At line 5 in file MyProg_18.s
+   Uses
+      None
+Comment: MyCode unused
+MyProg 00000000
+
+Symbol: MyProg
+   Definitions
+      At line 10 in file MyProg_18.s
+   Uses
+      At line 9 in file MyProg_18.s
+Comment: MyProg used once
+3 symbols
+337 symbols in table

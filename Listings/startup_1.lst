@@ -1,0 +1,249 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Программый модуль стартового файла StartUp_1
+    2 00000000         ; Определить переменную "Размер стека" (1 К байт)
+    3 00000000 00000400 
+                       Stack_Size
+                               EQU              0x00000400
+    4 00000000         ; Объявить секцию данных для размещения стека системы
+    5 00000000         ; без инициализации памяти, с атрибутом выравнивания 
+    6 00000000         ; по 8 байтам
+    7 00000000                 AREA             STACK, NOINIT, READWRITE, ALIGN=3
+    8 00000000         ; Зарезервировать область памяти под стек 
+    9 00000000         ; с числом байт Stack_Size            
+   10 00000000         Stack_Mem
+                               SPACE            Stack_Size  ; (1 К байт)
+   11 00000400         ; Метка вершины стека (авто-декрементный стек)
+   12 00000400         __initial_sp
+   13 00000400         
+   14 00000400         ; Установить для линкера атрибут выравнивания стека 
+   15 00000400         ; по границе 8 байт для совместимости с программным 
+   16 00000400         ; обеспечением верхнего уровня
+   17 00000400                 PRESERVE8
+   18 00000400         ; Использовать набор команд Thumb
+   19 00000400                 THUMB
+   20 00000400         
+   21 00000400         ; Vector Table 
+   22 00000400         ; Объявить секцию для размещения таблицы векторов 
+   23 00000400         ; прерываний/исключений
+   24 00000400         ; Для компановщика определяется как область памяти 
+   25 00000400         ; данных RESET. Будет автоматически размещена компоновщиком 
+   26 00000400         ; в начале памяти программ
+   27 00000400                 AREA             RESET, DATA, READONLY
+   28 00000000         ; Объявить параметры таблицы векторов - глобальными именами
+                       
+   29 00000000                 EXPORT           __Vectors
+   30 00000000                 EXPORT           __Vectors_End
+   31 00000000                 EXPORT           __Vectors_Size
+   32 00000000         ; Инициализация векторов обработчиков 
+   33 00000000         ; прерываний/исключений
+   34 00000000 00000000 
+                       __Vectors
+                               DCD              __initial_sp ; Вершина стека - Top of Stack 
+   35 00000004 00000000        DCD              Reset_Handler ; Точка выхода в обработчик исключения
+                                                            
+   36 00000008         ; по сбросу процессора Reset Handler
+   37 00000008 00000000        DCD              NMI_Handler ; Точка входа в обработчик
+   38 0000000C         ; немаскируемого прерывания NMI
+   39 0000000C         ;        ...
+   40 0000000C         ; Далее по аналогии могут быть объявлены и остальные 
+   41 0000000C         ; вектора обработчиков прерываний/исключений
+   42 0000000C         __Vectors_End
+   43 0000000C 0000000C 
+                       __Vectors_Size
+                               EQU              __Vectors_End - __Vectors
+   44 0000000C         
+   45 0000000C         ; Объявление кодовой секции для размещения 
+   46 0000000C         ; подпрограмм обработчиков прерываний/исключений
+   47 0000000C                 AREA             |.text|, CODE, READONLY
+   48 00000000         
+   49 00000000         ; Обработчик прерывания по сбросу процессора Reset
+   50 00000000         Reset_Handler
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                               PROC
+   51 00000000         ; Объявить процедуру Reset_Handler общедоступной
+   52 00000000         ; Она может быть перепрограммирована в последующем
+   53 00000000         ; Поэтому - используется опция WEAK ("Слабая метка")
+   54 00000000                 EXPORT           Reset_Handler [WEAK]
+   55 00000000         ; Иницализация процессора (через регистр CONTROL)
+   56 00000000         ;        ...
+   57 00000000         ; В данной версии стартового файла не выполняется
+   58 00000000         ; Процессор будет работать по умолчанию 
+   59 00000000         ; в режиме потока (Thread Mode) 
+   60 00000000         ; с привилегированным доступом ко всем ресурсам (Privilegied)
+   61 00000000         ; с пока выключенным сопроцессором FPU
+   62 00000000         
+   63 00000000         ; Передать управление пользовательской программе MyProg
+   64 00000000         ; Объявление точки входа в программу пользователя 
+   65 00000000         ; (внешняя метка)  
+   66 00000000                 IMPORT           MyProg
+   67 00000000         ; Псевдо-команда: загрузить адрес MyProg в регистр r0
+   68 00000000 4801            LDR              r0, =MyProg ; r0 <- адрес точки входа  
+   69 00000002         ; Косвенная передача управления программе пользователя       
+                        
+   70 00000002 4700            BX               r0          ; PC <- (r0)
+   71 00000004                 ENDP                         ; Конец процедуры Reset_Handler
+   72 00000004         
+   73 00000004         ; "Пустой" обработчик немаскируемого прерывания NMI ("шаблон")
+   74 00000004         NMI_Handler
+                               PROC
+   75 00000004         ; Объявить процедуру NMI_Handler общедоступной
+   76 00000004         ; В дальнейшем может быть перепрограммирована, 
+   77 00000004         ; использована опция WEAK ("Слабая метка")
+   78 00000004                 EXPORT           NMI_Handler [WEAK]
+   79 00000004         ; Зациклить программу обработчика 
+   80 00000004 E7FE            B                .
+   81 00000006                 ENDP                         ; Конец процедуры NMI_Handler
+   82 00000006         ; Выровнять кодовую секцию по 4-х байтовому слову
+   83 00000006 00 00           ALIGN
+   84 00000008         ; Конец ассемблерного текста стартового модуля         
+   85 00000008                 END
+              00000000 
+Command Line: --debug --xref --width=132 --diag_suppress=9931 --cpu=Cortex-M4.fp --depend=.\objects\startup_1.d -o.\objects\startup_
+1.o -I.\RTE\_Target_1 -IE:\keil\ARM\PACK\ARM\CMSIS\5.4.0\Device\ARM\ARMCM4\Include -IE:\keil\ARM\CMSIS\Include --predefine="__EVAL S
+ETA 1" --predefine="__UVISION_VERSION SETA 526" --predefine="ARMCM4_FP SETA 1" --list=.\listings\startup_1.lst StartUp_1.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+STACK 00000000
+
+Symbol: STACK
+   Definitions
+      At line 7 in file StartUp_1.s
+   Uses
+      None
+Comment: STACK unused
+Stack_Mem 00000000
+
+Symbol: Stack_Mem
+   Definitions
+      At line 10 in file StartUp_1.s
+   Uses
+      None
+Comment: Stack_Mem unused
+__initial_sp 00000400
+
+Symbol: __initial_sp
+   Definitions
+      At line 12 in file StartUp_1.s
+   Uses
+      At line 34 in file StartUp_1.s
+Comment: __initial_sp used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 27 in file StartUp_1.s
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 34 in file StartUp_1.s
+   Uses
+      At line 29 in file StartUp_1.s
+      At line 43 in file StartUp_1.s
+
+__Vectors_End 0000000C
+
+Symbol: __Vectors_End
+   Definitions
+      At line 42 in file StartUp_1.s
+   Uses
+      At line 30 in file StartUp_1.s
+      At line 43 in file StartUp_1.s
+
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 47 in file StartUp_1.s
+   Uses
+      None
+Comment: .text unused
+NMI_Handler 00000004
+
+Symbol: NMI_Handler
+   Definitions
+      At line 74 in file StartUp_1.s
+   Uses
+      At line 37 in file StartUp_1.s
+      At line 78 in file StartUp_1.s
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 50 in file StartUp_1.s
+   Uses
+      At line 35 in file StartUp_1.s
+      At line 54 in file StartUp_1.s
+
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+Stack_Size 00000400
+
+Symbol: Stack_Size
+   Definitions
+      At line 3 in file StartUp_1.s
+   Uses
+      At line 10 in file StartUp_1.s
+Comment: Stack_Size used once
+__Vectors_Size 0000000C
+
+Symbol: __Vectors_Size
+   Definitions
+      At line 43 in file StartUp_1.s
+   Uses
+      At line 31 in file StartUp_1.s
+Comment: __Vectors_Size used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+MyProg 00000000
+
+Symbol: MyProg
+   Definitions
+      At line 66 in file StartUp_1.s
+   Uses
+      At line 68 in file StartUp_1.s
+Comment: MyProg used once
+1 symbol
+348 symbols in table
