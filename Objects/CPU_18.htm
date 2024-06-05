@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\CPU_18.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\CPU_18.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6100100: Last Updated: Mon May 27 19:22:00 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6100100: Last Updated: Wed Jun  5 22:37:31 2024
 <BR><P>
 <H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -43,14 +43,19 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_1.o(RESET)
 </UL>
 <P><STRONG><a name="[4]"></a>MyProg</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, myprog_18_4.o(MyCode))
-<BR><BR>[Calls]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
+<BR><BR>[Calls]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sort_Array_Max_Min
+<LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
 </UL>
 <P>
 <H3>
 Local Symbols
-</H3><P>
+</H3>
+<P><STRONG><a name="[5]"></a>Sort_Array_Max_Min</STRONG> (Thumb, 66 bytes, Stack size 0 bytes, myprog_18_4.o(MyCode))
+<BR><BR>[Called By]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MyProg
+</UL>
+<P>
 <H3>
 Undefined Global Symbols
 </H3><HR></body></html>
